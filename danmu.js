@@ -1,28 +1,28 @@
 var currentDanmu= "";
 var i = 0;
 
+if( $('.video-player').length){
+    $('.video-player').prepend('<div id="danmu-overlay"></div>');
+}
+
+//document.getElementsByClassName("video-player__overlay").style.backgroundColor = "lightblue";
 // let elem = document.createElement('div');
 // elem.style.cssText = 'position:absolute;width:100%;height:100%;opacity:0.3;z-index:100;background:#000';
 // document.getElementsByClassName("video-player__overlay").appendChild(elem);
-//turn on danmu
+//turn on danmu 
 var addListeners=function(){
     let danmu = document.getElementsByClassName("text-fragment");
-    let twitch = document.getElementsByClassName("video-player__overlay");
-console.log( twitch);
-console.log( document.getElementsByClassName("video-player__overlay"));
+    //console.log(twitch);
    // for (i=0; i<danmu.length;i++){    
     //danmuArr.push(danmu[0].textContent,new Date().getTime());  
-    //}
-    document.getElementsByClassName("video-player__overlay").style.backgroundColor = "lightblue";
     if(danmu[i]){
         currentDanmu = danmu[i].textContent;
         console.log(currentDanmu);
-        twitch.innerHTML += '<div class="danmu-overlay">'+ currentDanmu +'</div>';
+        document.getElementById("danmu-overlay").innerHTML = currentDanmu;
         i++;
     }
  
 }
-
 //turn off danmu
 var removeListeners = function(){
      console.log("Danmu off");
@@ -30,12 +30,12 @@ var removeListeners = function(){
 //message listener for background
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse)    {
     if(request.command === 'init'){
-    //     setInterval(() => {
-    //     addListeners();
-    // }, 500); 
-    addListeners();
+        setInterval(() => {
+        addListeners();
+    }, 1000); 
+    sendResponse({result: "success"});
     }else{
         removeListeners();
     }
-    sendResponse({result: "success"});
+    
 });
