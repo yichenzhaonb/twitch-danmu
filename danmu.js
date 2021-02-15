@@ -1,6 +1,4 @@
 var currentDanmu= "";
-var i = 0;
-
 if( $('.video-player').length){
     $('.video-player').prepend('<div id="danmu-overlay"></div>');
 }
@@ -15,12 +13,11 @@ var addListeners=function(){
     //console.log(twitch);
    // for (i=0; i<danmu.length;i++){    
     //danmuArr.push(danmu[0].textContent,new Date().getTime());  
-    if(danmu[i]){
-        currentDanmu = danmu[i].textContent;
-        console.log(currentDanmu);
-        document.getElementById("danmu-overlay").innerHTML = currentDanmu;
-        i++;
-    }
+    currentDanmu = danmu[danmu.length-1].textContent;
+    console.log(currentDanmu);
+    document.getElementById("danmu-overlay").innerHTML = currentDanmu;
+    
+    
  
 }
 //turn off danmu
