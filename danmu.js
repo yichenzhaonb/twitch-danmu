@@ -2,12 +2,16 @@ var currentDanmu= "";
 var danmuLen = 50;
 var k=0;
 var line = 5;
-var screenLength=$(".video-player__default-player").width();
+var screenLength=$(".video-player__container").width();
 var pospx = {'left' : screenLength};
+var midu = 1;
+
+$(".video-player__container").prepend('<div class="danmu-overlay"></div>');
 
 var addListeners=function(){
-    // let danmu = document.getElementsByClassName("text-fragment");
     let danmuEmote = document.getElementsByClassName("chat-line__no-background");
+    screenLength= $(".video-player__container").width();
+    pospx = {'left' : screenLength};
     // if($('.danmu-overlay').length){
     //     $('.danmu-overlay').remove();
     // }
@@ -22,17 +26,21 @@ var addListeners=function(){
      }
 
     for(let i =0; i<line; i++){
-        console.log(danmu[i]);
+       if(danmu[i]){
         if($('.danmu-overlay-'+danmu[i].line).length){
-            $('.danmu-overlay-'+danmu[i].line).prepend('<div id="danmu-'+danmu[i].id+'" class="danmu">'+  danmu[i].content +'</div>');
-        }else{
-        $(".video-player__default-player").prepend('<div class="danmu-overlay danmu-overlay-'+danmu[i].line+ '"><div class="danmu" id="danmu-'+danmu[i].id+'" >'+  danmu[i].content +'</div></div>');
+            if($('.danmu-overlay-'+danmu[i].line).children().length <midu){
+                $('.danmu-overlay-'+danmu[i].line).prepend('<div id="danmu-'+danmu[i].id+'" class="danmu">'+  danmu[i].content +'</div>');
+            }
         }
+        else{
+        $(".danmu-overlay").prepend('<div class="danmu-overlay-line danmu-overlay-'+danmu[i].line+ '"><div class="danmu" id="danmu-'+danmu[i].id+'" >'+  danmu[i].content +'</div></div>');
+        }
+       
         moveDanmu(danmu[i]);
-    }
+        }
+      }
     
-    
-    
+
    }
    
 
@@ -50,16 +58,21 @@ var removeDanmu = function(item){
 
 //turn off danmu
 var removeListeners = function(){
+    if(danmuLoop){
      clearInterval(danmuLoop);
+    }
      $('.danmu-overlay').remove();
      console.log("Danmu off");
-}
-//message listener for background
+
+    }
+
+
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse)    {
     if(request.command === 'init'){
     danmuLoop = setInterval(() => {
         addListeners();
-    }, 2000); 
+    }, 1000); 
+    
     }else{
         removeListeners();
     }
@@ -71,7 +84,7 @@ window.onload=function(){
         if(data.hide){
             danmuLoop = setInterval(() => {
             addListeners();
-            }, 2000);
+            }, 1000);
         }else{
             removeListeners();
         } 
