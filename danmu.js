@@ -8,10 +8,12 @@ var midu = 1;
 
 $(".video-player__container").prepend('<div class="danmu-overlay"></div>');
 
+
 var addListeners=function(){
     let danmuEmote = document.getElementsByClassName("chat-line__no-background");
     screenLength= $(".video-player__container").width();
     pospx = {'left' : screenLength};
+   
     // if($('.danmu-overlay').length){
     //     $('.danmu-overlay').remove();
     // }
@@ -30,11 +32,18 @@ var addListeners=function(){
         if($('.danmu-overlay-'+danmu[i].line).length){
             if($('.danmu-overlay-'+danmu[i].line).children().length <midu){
                 $('.danmu-overlay-'+danmu[i].line).prepend('<div id="danmu-'+danmu[i].id+'" class="danmu">'+  danmu[i].content +'</div>');
+                if($('.danmu').length){
+                    $(".danmu").find('.chat-line__username-container').remove();
+                    $(".danmu").find('span[data-test-selector="chat-message-separator"]').remove();
+                }
+
             }
         }
         else{
         $(".danmu-overlay").prepend('<div class="danmu-overlay-line danmu-overlay-'+danmu[i].line+ '"><div class="danmu" id="danmu-'+danmu[i].id+'" >'+  danmu[i].content +'</div></div>');
-        }
+        $(".danmu").find('.chat-line__username-container').remove();
+        $(".danmu").find('span[data-test-selector="chat-message-separator"]').remove();
+       }
        
         moveDanmu(danmu[i]);
         }
