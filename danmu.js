@@ -2,12 +2,9 @@ var currentDanmu= "";
 var danmuLen = 50;
 var k=0;
 var line = 5;
-var screenLength=$(".video-player__container").width();
-var pospx = {'left' : screenLength};
 var midu = 1;
-
-$(".video-player__container").prepend('<div class="danmu-overlay"></div>');
-
+var screenLength= $(".video-player__container").width();
+var pospx = {'left' : screenLength};
 
 var addListeners=function(){
     let danmuEmote = document.getElementsByClassName("chat-line__no-background");
@@ -70,14 +67,15 @@ var removeListeners = function(){
     if(danmuLoop){
      clearInterval(danmuLoop);
     }
-     $('.danmu-overlay').remove();
-     console.log("Danmu off");
+    $('.danmu-overlay').remove();
+    console.log("Danmu off");
 
-    }
+}
 
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse)    {
     if(request.command === 'init'){
+    $(".video-player__container").prepend('<div class="danmu-overlay"></div>');
     danmuLoop = setInterval(() => {
         addListeners();
     }, 1000); 
@@ -91,6 +89,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse)    
 window.onload=function(){  
     chrome.storage.sync.get('hide', function(data) {
         if(data.hide){
+            $(".video-player__container").prepend('<div class="danmu-overlay"></div>');
             danmuLoop = setInterval(() => {
             addListeners();
             }, 1000);
