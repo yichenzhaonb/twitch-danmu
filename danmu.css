@@ -1,14 +1,30 @@
 .danmu-overlay {
-    position: relative;
-    width: 100%;
-    height:25px;
+    position: absolute;
+    height: 40%;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    z-index: 9999;
+    z-index: 10;
+  }
+  .danmu-overlay-line {
+    position: relative;
+    height: 20%;
+    top: 0;
+    left: -20px;
+    right: 0;
+    bottom: 0;
+    z-index: 10;
+  }
+  .danmu {
+    position: relative;
+    height: 30px;
+    top: 0;
+    left: -20px;
+    right: 0;
+    bottom: 0;
     font-size: 24px;
-    color:white;
+    z-index: 10;
   }
 
  /* .video-player__overlay {background-color: coral !important;} */
