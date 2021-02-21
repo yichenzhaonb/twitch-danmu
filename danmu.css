@@ -1,6 +1,6 @@
 .danmu-overlay {
     position: absolute;
-    height: 40%;
+    height: 80%;
     top: 0;
     left: 0;
     right: 0;
@@ -9,16 +9,30 @@
   }
   .danmu-overlay-line {
     position: relative;
-    height: 20%;
+    height: 8%;
     top: 0;
     left: -20px;
     right: 0;
     bottom: 0;
     z-index: 10;
   }
+
+  .danmu-overlay-mid{
+    position: relative;
+    height: 40%;
+    width:50%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10;
+    margin: 0 auto;
+    text-align: center;
+
+  }
   .danmu {
     position: relative;
-    height: 30px;
+    /* height: 30px; */
     top: 0;
     left: -20px;
     right: 0;
@@ -26,5 +40,7 @@
     font-size: 24px;
     z-index: 10;
   }
+
+
 
  /* .video-player__overlay {background-color: coral !important;} */
