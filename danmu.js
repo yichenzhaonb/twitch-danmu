@@ -65,7 +65,7 @@ var addListeners = function () {
           $("#danmu-" + danmu[m].id)
             .find("span")
             .css("color", "#" + randomColor);
-          console.log(randomColor);
+          // console.log(randomColor);
           if ($(".danmu").length) {
             removeUsername();
           }
@@ -114,7 +114,7 @@ var removeListeners = function () {
     clearInterval(danmuLoop);
   }
   $(".danmu-overlay").remove();
-  console.log("Danmu off");
+  //console.log("Danmu off");
 };
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
