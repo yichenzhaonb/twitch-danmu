@@ -13,6 +13,7 @@ var pospx = { left: screenLength };
 
 var addListeners = function () {
   let danmuEmote = document.getElementsByClassName("chat-line__no-background");
+  let randomColor = Math.floor(Math.random() * 16777215).toString(16);
   screenLength = $(".video-player__container").width();
   screenHeight = $(".video-player__container").height();
   pospx = { left: screenLength };
@@ -33,12 +34,18 @@ var addListeners = function () {
               $('.danmu-overlay-'+danmu[i].line).prepend('<div id="danmu-'+danmu[i].id+'" class="danmu">'+  danmu[i].content +'</div>');
               if($('.danmu').length){
                 removeUsername();
+                $("#danmu-" + danmu[i].id)
+                           .find("span")
+                            .css("color", "#" + randomColor);
               }
 
           }
       }
       else{
       $(".danmu-overlay").prepend('<div class="danmu-overlay-line danmu-overlay-'+danmu[i].line+ '"><div class="danmu" id="danmu-'+danmu[i].id+'" >'+  danmu[i].content +'</div></div>');
+      $("#danmu-" + danmu[i].id)
+      .find("span")
+       .css("color", "#" + randomColor);
       removeUsername();
      }
 
@@ -46,45 +53,45 @@ var addListeners = function () {
      }
   }
 
-   if( $(".danmu-overlay-mid").length){
-    $(".danmu-overlay-mid").remove();
-   }
+//    if( $(".danmu-overlay-mid").length){
+//     $(".danmu-overlay-mid").remove();
+//    }
 
-  for (let m = 5; m < line; m++) {
-    let randomColor = Math.floor(Math.random() * 16777215).toString(16);
-    if (danmu[m]) {
-      if ($(".danmu-overlay-mid").length) {
-        if ($(".danmu-overlay-mid").children().length < 5) {
-          $(".danmu-overlay-mid").prepend(
-            '<div id="danmu-' +
-              danmu[m].id +
-              '" class="danmu">' +
-              danmu[m].content +
-              "</div>"
-          );
-          $("#danmu-" + danmu[m].id)
-            .find("span")
-            .css("color", "#" + randomColor);
-          // console.log(randomColor);
-          if ($(".danmu").length) {
-            removeUsername();
-          }
-        }
-      } else {
-        $(".danmu-overlay").append(
-          '<div class="danmu-overlay-mid"><div class="danmu" id="danmu-' +
-            danmu[m].id +
-            '" >' +
-            danmu[m].content +
-            "</div></div>"
-        );
-        $("#danmu-" + danmu[m].id)
-          .find("span")
-          .css("color", "#" + randomColor);
-        removeUsername();
-      }
-    }
-  }
+//   for (let m = 5; m < line; m++) {
+//     let randomColor = Math.floor(Math.random() * 16777215).toString(16);
+//     if (danmu[m]) {
+//       if ($(".danmu-overlay-mid").length) {
+//         if ($(".danmu-overlay-mid").children().length < 5) {
+//           $(".danmu-overlay-mid").prepend(
+//             '<div id="danmu-' +
+//               danmu[m].id +
+//               '" class="danmu">' +
+//               danmu[m].content +
+//               "</div>"
+//           );
+//           $("#danmu-" + danmu[m].id)
+//             .find("span")
+//             .css("color", "#" + randomColor);
+//           // console.log(randomColor);
+//           if ($(".danmu").length) {
+//             removeUsername();
+//           }
+//         }
+//       } else {
+//         $(".danmu-overlay").append(
+//           '<div class="danmu-overlay-mid"><div class="danmu" id="danmu-' +
+//             danmu[m].id +
+//             '" >' +
+//             danmu[m].content +
+//             "</div></div>"
+//         );
+//         $("#danmu-" + danmu[m].id)
+//           .find("span")
+//           .css("color", "#" + randomColor);
+//         removeUsername();
+//       }
+//     }
+//   }
 
 };
 
