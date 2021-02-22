@@ -97,9 +97,11 @@ var moveDanmu = function (item) {
   //}
 };
 
+
 var removeDanmu = function (item) {
   $("#danmu-" + item.id).remove();
 };
+
 
 var removeUsername = function () {
   $(".danmu").find(".chat-line__username-container").remove();
@@ -107,6 +109,7 @@ var removeUsername = function () {
     .find('span[data-test-selector="chat-message-separator"]')
     .remove();
 };
+
 
 //turn off danmu
 var removeListeners = function () {
@@ -116,6 +119,7 @@ var removeListeners = function () {
   $(".danmu-overlay").remove();
   //console.log("Danmu off");
 };
+
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.command === "init") {
@@ -128,6 +132,8 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     removeListeners();
   }
 });
+
+
 window.onload = function () {
   chrome.storage.sync.get("hide", function (data) {
     if (data.hide) {
@@ -142,3 +148,4 @@ window.onload = function () {
     }
   });
 };
+
