@@ -98,7 +98,7 @@ var addListeners = function () {
 var moveDanmu = function (item) {
   //for(let i=0; i<item.length;i++){
   let danmuTime = Math.floor(Math.random() * 5000) + 5000;
-  $("#danmu-" + item.id).animate(pospx, danmuTime, "linear", function () {
+  $("#danmu-" + item.id).stop().animate(pospx, danmuTime, "linear", function () {
     removeDanmu(item);
   });
   //}
