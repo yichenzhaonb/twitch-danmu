@@ -28,7 +28,7 @@ var addListeners = function () {
   }
 
   for(let i =0; i<line-5; i++){
-     if(danmu[i]){
+     if(danmu[i] ){
       if($('.danmu-overlay-'+danmu[i].line).length){
           if($('.danmu-overlay-'+danmu[i].line).children().length <midu){
               $('.danmu-overlay-'+danmu[i].line).prepend('<div id="danmu-'+danmu[i].id+'" class="danmu">'+  danmu[i].content +'</div>');
@@ -98,9 +98,12 @@ var addListeners = function () {
 var moveDanmu = function (item) {
   //for(let i=0; i<item.length;i++){
   let danmuTime = Math.floor(Math.random() * 5000) + 5000;
-  $("#danmu-" + item.id).stop().animate(pospx, danmuTime, "linear", function () {
+  if($("#danmu-" + item.id).length){
+   // console.log($("#danmu-" + item.id));
+  $("#danmu-" + item.id).animate(pospx, danmuTime, "linear", function () {
     removeDanmu(item);
   });
+}
   //}
 };
 
