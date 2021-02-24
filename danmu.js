@@ -3,13 +3,67 @@ var danmuLen = 50;
 var k = 0;
 var line = 10;
 var mid = 5;
-var midu = 1;
+var midu = 20;
 var screenLength = $(".video-player__container").width();
 var screenHeight = $(".video-player__container").height();
 var pospx = { left: screenLength };
 
 
 /*To do add async array to save damnu, load danmu based on the number per seconds*/
+
+
+var danmuFeed = function (){
+  let twitchDanmuFeed = document.getElementsByClassName("chat-scrollable-area__message-container");
+  twitchDanmuFeedLength = document.getElementsByClassName("chat-scrollable-area__message-container")[0].childElementCount;
+  const config = { attributes: true, childList: true, subtree: true };
+  const callback = function(mutationsList, observer) {
+    for(const mutation of mutationsList) {
+        if (mutation.type === 'childList') {
+          twitchDanmuFeedLength = document.getElementsByClassName("chat-scrollable-area__message-container")[0].childElementCount;
+          console.log(twitchDanmuFeedLength);
+          console.log(mutation);
+        }
+        
+    }
+ }
+ const observer = new MutationObserver(callback); 
+
+ observer.observe(twitchDanmuFeed[0], config);
+}
+
+
+
+// var readDanmu = function(){
+//   let danmuEmote = document.getElementsByClassName("chat-line__no-background");
+
+//   let danmu = [];
+//   if (danmuEmote.length < midu){
+//     midu = danmuEmote.length;
+//   }
+
+//   for (let i = 0; i <  midu; i++) {
+//     if (danmuEmote[i]) {
+//       currentDanmu = danmuEmote[j].innerHTML;
+//       // console.log(currentDanmu);
+//       danmu.push({ id: i, content: currentDanmu });
+//     }
+  
+//   }
+
+// return new Promise(resolve=>{
+//   danmuFeed = setInterval(() => {
+    
+              
+
+    
+//   }, 1000);
+    
+
+
+// });
+
+// }
+
 
 var addListeners = function () {
   let danmuEmote = document.getElementsByClassName("chat-line__no-background");
@@ -134,9 +188,11 @@ var removeListeners = function () {
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.command === "init") {
     $(".video-player__container").prepend('<div class="danmu-overlay"></div>');
-    danmuLoop = setInterval(() => {
-      addListeners();
-    }, 1000);
+    //  danmuLoop = setInterval(() => {
+    //   //  addListeners();
+    //  }, 1000);
+    danmuFeed();
+
 
   } else {
     removeListeners();
@@ -150,9 +206,11 @@ window.onload = function () {
       $(".video-player__container").prepend(
         '<div class="danmu-overlay"></div>'
       );
-      danmuLoop = setInterval(() => {
-        addListeners();
-      }, 1000);
+      // danmuLoop = setInterval(() => {
+    
+      //   //addListeners();
+      // }, 1000);
+      danmuFeed();
     } else {
       removeListeners();
     }
