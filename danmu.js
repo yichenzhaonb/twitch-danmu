@@ -3,7 +3,7 @@ var danmuLen = 50;
 var k = 0;
 var line = 10;
 var mid = 5;
-var midu = 20;
+var midu = 2;
 var screenLength = $(".video-player__container").width();
 var screenHeight = $(".video-player__container").height();
 var pospx = { left: screenLength };
@@ -20,8 +20,10 @@ var danmuFeed = function (){
     for(const mutation of mutationsList) {
         if (mutation.type === 'childList') {
           twitchDanmuFeedLength = document.getElementsByClassName("chat-scrollable-area__message-container")[0].childElementCount;
-          console.log(twitchDanmuFeedLength);
-          console.log(mutation);
+          // console.log(twitchDanmuFeedLength);
+          // console.log(mutation);
+          addListeners();
+     
         }
         
     }
@@ -82,9 +84,18 @@ var addListeners = function () {
   }
 
   for(let i =0; i<line-5; i++){
+
+   
+
      if(danmu[i] ){
       if($('.danmu-overlay-'+danmu[i].line).length){
-          if($('.danmu-overlay-'+danmu[i].line).children().length <midu){
+        let children = document.getElementById('.danmu-overlay-'+danmu[i].line).children;
+        let totalWidth = 0; 
+        for (let i = 0; i < children.length; i++) {
+            totalWidth += children[i].offsetWidth;
+        }
+
+          if($('.danmu-overlay-'+danmu[i].line).children().length <midu &&  totalWidth<screenLength  ){
               $('.danmu-overlay-'+danmu[i].line).prepend('<div id="danmu-'+danmu[i].id+'" class="danmu">'+  danmu[i].content +'</div>');
               if($('.danmu').length){
                 removeUsername();
