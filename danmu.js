@@ -19,20 +19,14 @@ var danmuFeed = function (){
   let twitchDanmuFeed = document.getElementsByClassName("chat-scrollable-area__message-container");
   twitchDanmuFeedLength = document.getElementsByClassName("chat-scrollable-area__message-container")[0].childElementCount;
   let config = { attributes: true, childList: true, subtree: true };
-
   let callback = function(mutationsList, observer) {
     // totalDanmu = totalDanmu + mutationsList.length;
- 
     for(const mutation of mutationsList) {
         if (mutation.type === 'childList') {
           twitchDanmuFeedLength = document.getElementsByClassName("chat-scrollable-area__message-container")[0].childElementCount;
           // console.log(twitchDanmuFeedLength);
           //console.log(mutation);
-        
-   
-          addListeners();
-      
-          
+          addListeners();          
         }
         
     }
@@ -40,7 +34,6 @@ var danmuFeed = function (){
  observer = new MutationObserver(callback); 
  observer.observe(twitchDanmuFeed[0], config);
 }
-
 
 
 // var readDanmu = function(){
@@ -78,7 +71,7 @@ var danmuFeed = function (){
 var addListeners = function () {
   let danmuEmote = document.getElementsByClassName("chat-line__no-background");
   let randomColor = Math.floor(Math.random() * 16777215).toString(16);
-  
+  screenLength = $(".video-player__container").width();
   screenHeight = $(".video-player__container").height();
   pospx = { left: screenLength };
   let danmu = [];
@@ -167,28 +160,28 @@ var addListeners = function () {
 
 var moveDanmu = function (item) {
 
-  let start=null;
+//   let start=null;
   let danmuTime = Math.floor(Math.random() * 5000) + 5000;
-  let speed = Math.floor(Math.random() * 4) + 4;
-  let element = document.getElementById("danmu-"+item.id);
+//   let speed = Math.floor(Math.random() * 4) + 4;
+//   let element = document.getElementById("danmu-"+item.id);
   
 
-  if(element){
-    //element.style.position = 'absolute';
-  function step(timestamp) {
-    if (!start) start = timestamp;
-    let progress = timestamp - start;
-    screenLength = $(".video-player__container").width();
-    element.style.left = Math.min(progress / speed, screenLength+100) + 'px';
-    if (progress < danmuTime) {
-      window.requestAnimationFrame(step);
-    }else{
-      removeDanmu(item);
-      // cancelAnimationFrame(move);
-    }
-  }
-window.requestAnimationFrame(step);
-}
+//   if(element){
+//     //element.style.position = 'absolute';
+//   function step(timestamp) {
+//     if (!start) start = timestamp;
+//     let progress = timestamp - start;
+//     screenLength = $(".video-player__container").width();
+//     element.style.left = Math.min(progress / speed, screenLength+100) + 'px';
+//     if (progress < danmuTime) {
+//       window.requestAnimationFrame(step);
+//     }else{
+//       removeDanmu(item);
+//       // cancelAnimationFrame(move);
+//     }
+//   }
+// window.requestAnimationFrame(step);
+// }
   // animeId = window.requestAnimationFrame(() => {
   //   if (cntr < cntnrWidth - 70) {
   //     elemToMove.style.left = cntr + "px";
@@ -211,13 +204,14 @@ window.requestAnimationFrame(step);
   // });
 
   //for(let i=0; i<item.length;i++){
-
-  // if($("#danmu-" + item.id).length){
-  //  // console.log($("#danmu-" + item.id));
-  // $("#danmu-" + item.id).animate(pospx, danmuTime, "linear", function () {
-  //   removeDanmu(item);
-  // });
-// }
+ 
+  pospx = { left: screenLength };
+  if($("#danmu-" + item.id).length){
+   // console.log($("#danmu-" + item.id));
+  $("#danmu-" + item.id).velocity(pospx, danmuTime, "linear", function () {
+    removeDanmu(item);
+  });
+}
   //}
 };
 
