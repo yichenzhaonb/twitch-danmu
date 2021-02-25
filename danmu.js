@@ -10,6 +10,7 @@ var pospx = { left: screenLength };
 var observer =null;
 var transformed = false;
 var animeId = null;
+// var totalDanmu =0;
 
 /*To do add async array to save damnu, load danmu based on the number per seconds*/
 
@@ -18,14 +19,20 @@ var danmuFeed = function (){
   let twitchDanmuFeed = document.getElementsByClassName("chat-scrollable-area__message-container");
   twitchDanmuFeedLength = document.getElementsByClassName("chat-scrollable-area__message-container")[0].childElementCount;
   let config = { attributes: true, childList: true, subtree: true };
+
   let callback = function(mutationsList, observer) {
+    // totalDanmu = totalDanmu + mutationsList.length;
+ 
     for(const mutation of mutationsList) {
         if (mutation.type === 'childList') {
           twitchDanmuFeedLength = document.getElementsByClassName("chat-scrollable-area__message-container")[0].childElementCount;
           // console.log(twitchDanmuFeedLength);
-          // console.log(mutation);
+          //console.log(mutation);
+        
+   
           addListeners();
-     
+      
+          
         }
         
     }
