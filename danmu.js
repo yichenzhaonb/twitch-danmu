@@ -1,4 +1,4 @@
-//line of damnu
+//max line of damnu
 var line =10;
 // var mid = 3;
 //max number of danmu per line
@@ -10,14 +10,12 @@ var observer = null;
 var update = false;
 var danmuSpeed = 0;
 
-
 var danmuFeed = function () {
   let twitchDanmuFeed = document.getElementsByClassName(
     "chat-scrollable-area__message-container"
   );
   let config = { attributes: true, childList: true, subtree: true };
   let callback = function (mutationsList, observer) {
-    danmuSpeed=0;
     for (const mutation of mutationsList) {
       if (mutation.type === "childList") {
             if(mutation.addedNodes.length){
@@ -38,7 +36,7 @@ var addListeners = function () {
   let danmuEmote = document.getElementsByClassName("chat-line__message");
   let danmuLength= danmuEmote.length;
   let currentDanmu="";
-  //console.log(danmuLength);
+
   //let randomColor = Math.floor(Math.random() * 16777215).toString(16);
   let randomColor = 000000;
   // let last =danmuEmote[danmuLength-1].innerHTML;
@@ -46,9 +44,8 @@ var addListeners = function () {
   //screenHeight = $(".video-player__container").height();
   pospx = { left: screenLength };
   let danmu = [];
-  //console.log(danmuSpeed);
-  if (danmuSpeed>10){
-    danmuSpeed=10;
+  if (danmuSpeed>line){
+    danmuSpeed=line;
   }
   for (let j = danmuLength - danmuSpeed; j < danmuLength; j++) {
     if (danmuEmote[j]) { 
@@ -59,16 +56,11 @@ var addListeners = function () {
 
   }
 
-  //console.log(danmu);
 
   for (let i = 0; i < danmu.length; i++) {
     //if (danmu[i]) {
       if ($(".danmu-overlay-" + danmu[i].line).length) {
-        // let children = document.getElementById('.danmu-overlay-'+danmu[i].line).children;
-        // let totalWidth = 0;
-        // for (let i = 0; i < children.length; i++) {
-        //     totalWidth += children[i].offsetWidth;
-        // }
+ 
         if ($(".danmu-overlay-" + danmu[i].line).children().length < midu) {
           $(".danmu-overlay-" + danmu[i].line).prepend(
             '<div class="danmu">' + danmu[i].content + "</div>"
@@ -87,7 +79,7 @@ var addListeners = function () {
 
         }
       } else {
-        $(".danmu-overlay").prepend(
+        $(".danmu-overlay").append(
           '<div class="danmu-overlay-line danmu-overlay-' +
             danmu[i].line +
             '"><div class="danmu" >' +
@@ -108,7 +100,8 @@ var addListeners = function () {
       }
 
       moveDanmu(danmu[i]);
-      update =false;
+      update = false;
+      danmuSpeed=0;
     //}
   }
 
