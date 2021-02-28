@@ -1,7 +1,7 @@
 .danmu-overlay {
     position: absolute;
-    width:200%;
-    height: 60%;
+    width:300%;
+    height: 80%;
     top: 0;
     left: 0;
     right: 0;
@@ -10,15 +10,15 @@
   }
   .danmu-overlay-line {
     position: relative;
-    height: 12%;
+    height: 8%;
     top: 0;
-    left: -20px;
+    left: 0;
     right: 0;
     bottom: 0;
     z-index: 10;
   }
 
-  .danmu-overlay-mid{
+  /* .danmu-overlay-mid{
     position: relative;
     height: 40%;
     width:50%;
@@ -30,7 +30,7 @@
     margin: 0 auto;
     text-align: center;
 
-  }
+  } */
   .danmu {
     position: absolute;
     /* height: 30px; */
