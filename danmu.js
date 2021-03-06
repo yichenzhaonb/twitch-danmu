@@ -5,13 +5,14 @@ var line = 4;
 var midu =2;
 var screenLength = $(".video-player__container").width();
 //var screenHeight = $(".video-player__container").height();
-var pospx = {   translateZ: 0,translateX: screenLength+100 };
-var observer = null;
+var pospx ={transform: "translateX("+screenLength+"px)" };
 var update = false;
 var danmuSpeed = 0;
 var danmu=[];
+var observer = null;
 
 var danmuFeed = function () {
+
   let twitchDanmuFeed = document.getElementsByClassName(
     "chat-scrollable-area__message-container"
   );
@@ -20,29 +21,29 @@ var danmuFeed = function () {
     for (const mutation of mutationsList) {
       if (mutation.type === "childList") {
             if(mutation.addedNodes.length){
-              //console.log(mutation.addedNodes[0].innerHTML);
               if (danmuSpeed>line){
                 danmuSpeed=line;
                 }
-
-
               danmu.push({ content: mutation.addedNodes[0].innerHTML });
               danmuSpeed++;   
             }
+       
         update = true;
        
       }
     }
     
   };
+
   observer = new MutationObserver(callback);
   observer.observe(twitchDanmuFeed[0], config);
+
 };
 
 
 var addListeners = function () {
   let randomColor = 000000;
-  screenLength = $(".video-player__container").width()+100;
+  screenLength = $(".video-player__container").width();
   for (let i = 0; i < danmuSpeed; i++) {
     //if (danmu[i]) {
       if ($(".danmu-overlay-" + i).length ==0) {
@@ -52,7 +53,7 @@ var addListeners = function () {
       }
 
   }
-
+  if(update==true){
   for (let i = 0; i < danmu.length; i++) {
       if ($(".danmu-overlay-" + i).length) {
         if ($(".danmu-overlay-" +i).children().length < midu) {
@@ -72,6 +73,7 @@ var addListeners = function () {
       } 
       moveDanmu(i);
   }
+  }
   update = false;
   danmu=[];
   danmuSpeed=0;
@@ -87,7 +89,6 @@ var moveDanmu = function (item) {
     $(".danmu-overlay-" + item)
       .children(".danmu")
       .each(function () {
-     
         $(this).velocity(pospx,
           danmuTime, 
          "linear",function () {
@@ -123,31 +124,28 @@ var removeListeners = function () {
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.command === "init") {
     $(".video-player__container").prepend('<div class="danmu-overlay"></div>');
-     danmuLoop = setInterval(() => {
-       if(update==true){
-       addListeners();
-       }
-     }, 3000);
     danmuFeed();
+     danmuLoop = setInterval(() => {
+       addListeners();
+     }, 5000);
+ 
   } else {
     removeListeners();
   }
 });
 
-window.onload = function () {
+$( document ).ready(function() {
   chrome.storage.sync.get("hide", function (data) {
     if (data.hide) {
       $(".video-player__container").prepend(
         '<div class="danmu-overlay"></div>'
       );
-      danmuLoop = setInterval(() => {
-        if(update==true){
-        addListeners();
-        }
-      }, 3000);
       danmuFeed();
+      danmuLoop = setInterval(() => {
+        addListeners();
+      }, 5000);
     } else {
       removeListeners();
     }
   });
-};
+});
