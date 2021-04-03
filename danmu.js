@@ -1,8 +1,12 @@
 //max line of damnu
-var line = 4;
+var line = 5;
+var Speedlimit = 10;
 // var mid = 3;
 //max number of danmu per line
 var midu =2;
+var interval = 5000;
+var randomColor = 000000;
+
 var screenLength = $(".video-player__container").width();
 //var screenHeight = $(".video-player__container").height();
 var pospx ={transform: "translateX("+screenLength+"px)" };
@@ -10,56 +14,65 @@ var update = false;
 var danmuSpeed = 0;
 var danmu=[];
 var observer = null;
+var danmuLoop= null;
+
 
 var danmuFeed = function () {
-
   let twitchDanmuFeed = document.getElementsByClassName(
     "chat-scrollable-area__message-container"
   );
-  let config = { attributes: true, childList: true, subtree: true };
+ 
+  let config = { childList: true};
   let callback = function (mutationsList, observer) {
     for (const mutation of mutationsList) {
       if (mutation.type === "childList") {
             if(mutation.addedNodes.length){
-              if (danmuSpeed>line){
-                danmuSpeed=line;
+              update = true;
+              if (danmuSpeed>=Speedlimit){
+                danmu=[]; 
+                danmuSpeed=0; 
+                update = false; 
                 }
-              danmu.push({ content: mutation.addedNodes[0].innerHTML });
-              danmuSpeed++;   
+              else{
+                danmu.push({ content: mutation.addedNodes[0].innerHTML});
+                danmuSpeed++;  
+              } 
+            }else{
+                update = false; 
             }
-       
-        update = true;
-       
+         
       }
-    }
-    
+    }   
   };
-
   observer = new MutationObserver(callback);
   observer.observe(twitchDanmuFeed[0], config);
-
 };
 
-
 var addListeners = function () {
-  let randomColor = 000000;
+  //console.log("listening on the twitch");
+ 
   screenLength = $(".video-player__container").width();
-  for (let i = 0; i < danmuSpeed; i++) {
+  for (let i = 0; i < line; i++) {
     //if (danmu[i]) {
       if ($(".danmu-overlay-" + i).length ==0) {
         $(".danmu-overlay").append(
           '<div class="danmu-overlay-line danmu-overlay-' +
             i + '"></div>');
-      }
 
+      }
   }
+  $(".danmu-overlay-line") .css({height:80/line+"%"});
+
   if(update==true){
   for (let i = 0; i < danmu.length; i++) {
       if ($(".danmu-overlay-" + i).length) {
-        if ($(".danmu-overlay-" +i).children().length < midu) {
+        if ($(".danmu-overlay-" +i).children().length <midu) {
+
+          $(".danmu-overlay-" + i) .css({left: screenLength});
           $(".danmu-overlay-" + i).prepend(
             '<div class="danmu">' + danmu[i].content + "</div>"
           );
+          
           if ($(".danmu").length) {
             // $(".danmu").offset({ left: 0});
             removeUsername();
@@ -68,32 +81,37 @@ var addListeners = function () {
               .find("span")
               .css("color", "#" + randomColor);
           } 
-
+          moveDanmu(i);
         }
       } 
-      moveDanmu(i);
+    
+   }
+   console.log(danmu);
+
   }
-  }
-  update = false;
-  danmu=[];
-  danmuSpeed=0;
+ 
 };
 
 var moveDanmu = function (item) {
-  let danmuTime = Math.floor(Math.random() * 5000) + 5000;
-  // screenLength= screenLength - $(this).position().left;
-  // console.log( screenLength);
-  pospx = {transform: "translateX("+screenLength+"px)" };
- 
-  if ($(".danmu-overlay-" + item).children().length) {
+let danmuTime = Math.floor(Math.random() * 5000) + 5000;
+if ($(".danmu-overlay-" + item).children().length) {
     $(".danmu-overlay-" + item)
       .children(".danmu")
       .each(function () {
-        $(this).velocity(pospx,
-          danmuTime, 
-         "linear",function () {
+        let travel= $.trim($(this).html()).length +screenLength;
+        $(this).velocity(
+          {
+            transform: "translateX(-"+ travel +"px)",
+          },
+          {
+          duration:danmuTime, 
+          easing:"linear",
+          complete: function () {
+          //console.log($(this));
           $(this).remove();
-        });
+          }
+        }
+        );
   
       });
   }
@@ -116,7 +134,6 @@ var removeListeners = function () {
   if(observer){
   observer.disconnect();
   }
-
   $(".danmu-overlay").remove();
   console.log("Danmu off");
 };
@@ -125,9 +142,9 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.command === "init") {
     $(".video-player__container").prepend('<div class="danmu-overlay"></div>');
     danmuFeed();
-     danmuLoop = setInterval(() => {
+    danmuLoop = setInterval(() => {
        addListeners();
-     }, 5000);
+     }, interval );
  
   } else {
     removeListeners();
@@ -143,7 +160,7 @@ $( document ).ready(function() {
       danmuFeed();
       danmuLoop = setInterval(() => {
         addListeners();
-      }, 5000);
+      }, interval );
     } else {
       removeListeners();
     }
