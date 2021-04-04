@@ -67,7 +67,6 @@ var addListeners = function () {
   for (let i = 0; i < danmu.length; i++) {
       if ($(".danmu-overlay-" + i).length) {
         if ($(".danmu-overlay-" +i).children().length <midu) {
-
           $(".danmu-overlay-" + i) .css({left: screenLength});
           $(".danmu-overlay-" + i).prepend(
             '<div class="danmu">' + danmu[i].content + "</div>"

@@ -29,8 +29,10 @@
   .danmu {
     position: absolute;
     top: 0;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
     font-size: 24px;
     z-index: 10;
+ 
   }
 
 
