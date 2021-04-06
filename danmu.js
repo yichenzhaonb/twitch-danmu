@@ -61,7 +61,7 @@ var addListeners = function () {
 
       }
   }
-  $(".danmu-overlay-line") .css({height:80/line+"%"});
+  $(".danmu-overlay-line") .css({height:50/line+"%"});
 
   if(update==true){
   for (let i = 0; i < danmu.length; i++) {
@@ -85,7 +85,7 @@ var addListeners = function () {
       } 
     
    }
-   console.log(danmu);
+   //console.log(danmu);
 
   }
  
@@ -106,8 +106,10 @@ if ($(".danmu-overlay-" + item).children().length) {
           duration:danmuTime, 
           easing:"linear",
           complete: function () {
-          //console.log($(this));
+         // console.log($(this));
+          if($(this).length){
           $(this).remove();
+          }
           }
         }
         );
@@ -125,8 +127,32 @@ var removeUsername = function () {
   
 };
 
+function resetDanmu(){
+  removeDanmu();
+  $(".video-player__container").prepend('<div class="danmu-overlay"></div>');
+  danmuFeed();
+  danmuLoop = setInterval(() => {
+     addListeners();
+   }, interval );
+   chrome.storage.sync.set({'danmuOn': 1}, function() {
+    //console.log('The value is'+ 1);
+  });
+}
+
+function startDanmu(){
+  $(".video-player__container").prepend('<div class="danmu-overlay"></div>');
+    danmuFeed();
+    danmuLoop = setInterval(() => {
+       addListeners();
+     }, interval );
+   chrome.storage.sync.set({'danmuOn': 1}, function() {
+     // console.log('The value is'+ 1);
+    });
+}
+
+
 //turn off danmu
-var removeListeners = function () {
+var removeDanmu = function () {
   if (danmuLoop) {
     clearInterval(danmuLoop);
   }
@@ -134,34 +160,43 @@ var removeListeners = function () {
   observer.disconnect();
   }
   $(".danmu-overlay").remove();
-  console.log("Danmu off");
+  chrome.storage.sync.set({'danmuOn': 0}, function() {
+    //console.log('The value is'+ 0);
+  });
 };
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.command === "init") {
-    $(".video-player__container").prepend('<div class="danmu-overlay"></div>');
-    danmuFeed();
-    danmuLoop = setInterval(() => {
-       addListeners();
-     }, interval );
- 
-  } else {
-    removeListeners();
+    startDanmu();
+    console.log("Danmu start");
   }
+  if (request.command === "remove" || request.message=="suspend") {
+    removeDanmu();
+    console.log("Danmu off");
+  }
+  if (request.message === 'changeTab') {
+    resetDanmu();
+    console.log("Danmu reset change url");
+  }
+  if (request.message === 'activateTab') {
+    resetDanmu();
+    console.log("Danmu reset activate tab");
+  }
+  if (request.message === 'notMinimized') {
+    // resetDanmu();
+    // console.log("Danmu reset minimized window activate");
+  }
+
 });
 
-$( document ).ready(function() {
-  chrome.storage.sync.get("hide", function (data) {
-    if (data.hide) {
-      $(".video-player__container").prepend(
-        '<div class="danmu-overlay"></div>'
-      );
-      danmuFeed();
-      danmuLoop = setInterval(() => {
-        addListeners();
-      }, interval );
+$( document).ready(function() {
+  chrome.storage.sync.get("danmuOn", function (data) {
+    if (data.danmuOn) {
+      startDanmu();
     } else {
-      removeListeners();
+      removeDanmu();
     }
   });
 });
+
+
